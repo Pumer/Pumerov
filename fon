@@ -1,0 +1,28 @@
+#include "project.cpp"
+
+class Fon{
+
+	Fon(int i1, int i2, int j0){
+this->i1=i1;
+this->i2=i2;
+this->j0=j0;
+
+
+ //int i1,i2,j0;
+
+
+void fon()
+{
+	int i1=0,i2;
+for(i=0;i<j0;i++)//закраска фона
+{                                                                                         
+  i2=(255.*i)/j0;
+  SelectObject(hdc,hp4[i2]);  
+ 
+  MoveToEx(hdc, 0,i, NULL);                                                            
+  LineTo(hdc, 1500,i); 
+} 
+
+}
+	}
+	};
