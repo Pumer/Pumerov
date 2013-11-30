@@ -1,0 +1,80 @@
+#include "project.cpp"
+class Kamen{
+
+	Kamen(double hkam,double vkam,double g,double xkam, int v0,double xk,double yk,double vxk,double vyk,int xk0,int yk0,int dvig){
+this->hkam=hkam;
+this->vkam=vkam;
+this->g=g;
+this->xkam=xkam;
+this->v0=v0;
+this->xk=xk;
+this->yk=yk;
+this->vxk=vxk;
+this->vyk=vyk;
+this->xk0=xk0;
+this->yk0=yk0;
+this->dvig=dvig;
+
+  //double hkam=25/kh,vkam=10,g=9.8,xkam=xp/kh,v0=15; //характеристики движения камня
+  //double xk=xkam,yk=vulcanh;//координаты камня в метрах
+  //double vxk=50,vyk=50;//проекции скорости камня в м/c
+  //int xk0,yk0;//координаты камня в пикселях
+
+
+
+
+
+void dvig kamen()
+{
+   SelectObject(hdc,hp3[0]); 
+	hkam=0;   
+	yp=j0;
+    while(yp>pivulcanh+3)                      
+    {                                        //движение
+   	yp=j0-hkam*kh-3;                         //камня из жерла
+	Rectangle(hdc,xp-3,yp-3,xp+3,yp+3);      //вулкана
+	hkam+=vkam*dt;
+	
+    }  
+}
+
+
+
+
+void  vibros kamney ()
+{
+dvig=0;
+m2:
+
+while(yk>0)                                                
+{                                                                                         
+  SelectObject(hdc,hp3[0]); 
+  xk0=xk*kh,yk0=j0-yk*kh; 
+  Ellipse(hdc,xk0-3,yk0-3,xk0+3,yk0+3); //выброс  
+  xk+=vxk*dt*0.6;
+  yk+=vyk*dt*0.8;
+  vyk-=g*dt;
+}
+
+ 
+                                       //камней
+if ((dvig%10)==0)
+{                                        
+yk=2000;
+ xk=2250;
+ vxk=10-dvig;                          // из жерла
+ vyk=50+dvig;
+ dvig+=5;
+}
+else                                  
+{
+ yk=2000;
+ xk=2250;
+ vxk=50+dvig;
+ vyk=50+dvig;                          //вулкана
+ dvig+=5;
+}
+ if(dvig<90) goto m2; 
+}
+
+	};
