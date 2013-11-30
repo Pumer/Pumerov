@@ -1,0 +1,381 @@
+// project.cpp : Defines the entry point for the application.
+//
+
+#include "stdafx.h"
+#include "project.h"
+#include <math.h>
+#include "fon.cpp"
+#include "kamen.cpp"
+#include "vylkan.cpp"
+#define n 5
+#define kh 0.2  //коэффициент перевода из метров в пиксели для вулкана и камней
+
+
+
+#define MAX_LOADSTRING 100
+// Global Variables:
+HINSTANCE hInst;								// current instance
+TCHAR szTitle[MAX_LOADSTRING];					// The title bar text
+TCHAR szWindowClass[MAX_LOADSTRING];			// the main window class name
+
+// Forward declarations of functions included in this code module:
+ATOM				MyRegisterClass(HINSTANCE hInstance);
+BOOL				InitInstance(HINSTANCE, int);
+LRESULT CALLBACK	WndProc(HWND, UINT, WPARAM, LPARAM);
+INT_PTR CALLBACK	About(HWND, UINT, WPARAM, LPARAM);
+
+
+void PaintWindow(HWND hWnd)
+{
+  PAINTSTRUCT ps; 
+  HDC hdc;
+  
+// HBRUSH hbr0[n],hbr1;
+ HPEN hp0,hp1,hp2,hp3[256],hp4[256];
+/**/
+  int i,j,cr,cg,cb,xp=460,yp=500;
+  int i0=455,j0=550;   /*начало координат в пикселях */
+  double t=0,dt=0.0009; //время , шаг по времени
+  double vulcanh=2000; /*высота вулкана(м)*/
+  double rgerla=100; /* радиус жерла(м)*/
+  double leftx=2000,rightx=2500; /*левая и правая границы основания(м)*/ 
+  int pivulcanh=j0-kh*vulcanh; /*уровень жерла в пикселях*/
+  int pirgerla=kh*rgerla; /* радиус жерла в пикселях*/
+  int pileftx=i0-kh*leftx,pirightx=i0+kh*rightx; /*левая и правая границы основания в пикселях*/
+  double alf=0.5;
+  double hkam=25/kh,vkam=10,g=9.8,xkam=xp/kh,v0=15; //характеристики движения камня
+  double xk=xkam,yk=vulcanh;//координаты камня в метрах
+  double vxk=50,vyk=50;//проекции скорости камня в м/c
+  int xk0,yk0;//координаты камня в пикселях
+
+ 
+
+
+ 
+
+  hdc=BeginPaint(hWnd,&ps);
+                                            
+  //hbr1=CreateSolidBrush(RGB(255,255,255));
+  //hp1=CreatePen(PS_SOLID,1, RGB(000,000,0));
+  //hp0=CreatePen(PS_SOLID,1, RGB(000,000,0));
+  //hp2=CreatePen(PS_SOLID,8, RGB(255,100,0));
+
+  for(i=0;i<256;i++)/*создание грандиентной заливки */
+  {
+    hp3[i]=CreatePen(PS_SOLID,8, RGB(255-i,100*(1-i/255.),0));/* изменение цвета заливки вулкана*/
+	if(i<230)
+	{
+      cr=100;             
+	  cg=200*(1-i/255.);
+	  cb=255-i;
+	}
+	else
+	{
+      cr=0;                 
+	  cg=0;
+	  cb=255;
+	}
+
+	hp4[i]=CreatePen(PS_SOLID,8, RGB(cr,cg,cb));/* изменение цвета заливки неба*/
+  }
+  
+ 
+
+ 
+ //MoveToEx(hdc, pileftx, j0, NULL); // левый склон вулкана
+ //LineTo(hdc, i0-pirgerla, pivulcanh);
+
+
+ //MoveToEx(hdc, pirightx, j0, NULL); // правый склон вулкана
+ //LineTo(hdc, i0+pirgerla, pivulcanh);
+
+ //MoveToEx(hdc,i0-pirgerla, pivulcanh, NULL);// жерло вулкана 
+ //LineTo(hdc, i0+pirgerla,pivulcanh);
+ //
+ //MoveToEx(hdc, 0, j0, NULL); //уровень земли 
+ //LineTo(hdc, 1500, j0);
+
+ 
+//SelectObject(hdc,hp2);
+
+
+fon();
+dvig1();
+dvig kamen();
+dvig2();
+vibros kamney(); 
+
+
+
+
+
+
+
+
+
+
+
+int i1=0,i2;
+for(i=0;i<j0;i++)//закраска фона
+{                                                                                         
+  i2=(255.*i)/j0;
+  SelectObject(hdc,hp4[i2]);  
+ 
+  MoveToEx(hdc, 0,i, NULL);                                                            
+  LineTo(hdc, 1500,i); 
+} 
+
+t=0;
+  SelectObject(hdc,hp3[255]); 
+while(t<100)                                           
+{                                                                                    // черный силуэт вулкана        
+  alf=t/100;                                                                         //расткеание                                  
+  MoveToEx(hdc, alf*pileftx+(1-alf)*(i0-pirgerla), alf*j0+(1-alf)*pivulcanh, NULL);    //  лавы                                                        
+  LineTo(hdc, alf*pirightx+(1-alf)*(i0+pirgerla),alf*j0+(1-alf)*pivulcanh);                                   
+  t+=dt;  
+} 
+
+//m1:
+//i1++;  
+
+    SelectObject(hdc,hp3[0]); 
+	hkam=0;   
+	yp=j0;
+    while(yp>pivulcanh+3)                      
+    {                                        //движение
+   	yp=j0-hkam*kh-3;                         //камня из жерла
+	Rectangle(hdc,xp-3,yp-3,xp+3,yp+3);      //вулкана
+	hkam+=vkam*dt;
+	
+    }  
+
+
+
+t=0;
+double  alf1;
+while(t<100)                                                
+{                                                                                         
+  alf=t/100; 
+  alf1=1+(alf-1);
+
+  i2=(int)(255*alf1+5*i1);
+  if(i2>255) i2=255; 
+  SelectObject(hdc,hp3[i2]);                                                              //движение                                  
+  MoveToEx(hdc, alf*pileftx+(1-alf)*(i0-pirgerla), alf*j0+(1-alf)*pivulcanh, NULL);       //оранжевой                                                   
+  LineTo(hdc, alf*pirightx+(1-alf)*(i0+pirgerla),alf*j0+(1-alf)*pivulcanh);               //  лавы                       
+  t+=dt;     
+
+  
+}
+
+
+int dvig=0;
+m2:
+
+while(yk>0)                                                
+{                                                                                         
+  SelectObject(hdc,hp3[0]); 
+  xk0=xk*kh,yk0=j0-yk*kh; 
+  Ellipse(hdc,xk0-3,yk0-3,xk0+3,yk0+3); //выброс  
+  xk+=vxk*dt*0.6;
+  yk+=vyk*dt*0.8;
+  vyk-=g*dt;
+}
+
+ 
+                                       //камней
+if ((dvig%10)==0)
+{                                        
+yk=2000;
+ xk=2250;
+ vxk=10-dvig;                          // из жерла
+ vyk=50+dvig;
+ dvig+=5;
+}
+else                                  
+{
+ yk=2000;
+ xk=2250;
+ vxk=50+dvig;
+ vyk=50+dvig;                          //вулкана
+ dvig+=5;
+}
+ if(dvig<90) goto m2; 
+
+
+
+
+
+  EndPaint(hWnd,&ps);
+}  
+
+
+int APIENTRY _tWinMain(HINSTANCE hInstance,
+                     HINSTANCE hPrevInstance,
+                     LPTSTR    lpCmdLine,
+                     int       nCmdShow)
+{
+	UNREFERENCED_PARAMETER(hPrevInstance);
+	UNREFERENCED_PARAMETER(lpCmdLine);
+
+ 	// TODO: Place code here.
+	MSG msg;
+	HACCEL hAccelTable;
+
+	// Initialize global strings
+	LoadString(hInstance, IDS_APP_TITLE, szTitle, MAX_LOADSTRING);
+	LoadString(hInstance, IDC_PROJECT, szWindowClass, MAX_LOADSTRING);
+	MyRegisterClass(hInstance);
+
+	// Perform application initialization:
+	if (!InitInstance (hInstance, nCmdShow))
+	{
+		return FALSE;
+	}
+
+	hAccelTable = LoadAccelerators(hInstance, MAKEINTRESOURCE(IDC_PROJECT));
+
+	// Main message loop:
+	while (GetMessage(&msg, NULL, 0, 0))
+	{
+		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg))
+		{
+			TranslateMessage(&msg);
+			DispatchMessage(&msg);
+		}
+	}
+
+	return (int) msg.wParam;
+}
+
+
+
+//
+//  FUNCTION: MyRegisterClass()
+//
+//  PURPOSE: Registers the window class.
+//
+//  COMMENTS:
+//
+//    This function and its usage are only necessary if you want this code
+//    to be compatible with Win32 systems prior to the 'RegisterClassEx'
+//    function that was added to Windows 95. It is important to call this function
+//    so that the application will get 'well formed' small icons associated
+//    with it.
+//
+ATOM MyRegisterClass(HINSTANCE hInstance)
+{
+	WNDCLASSEX wcex;
+
+	wcex.cbSize = sizeof(WNDCLASSEX);
+
+	wcex.style			= CS_HREDRAW | CS_VREDRAW;
+	wcex.lpfnWndProc	= WndProc;
+	wcex.cbClsExtra		= 0;
+	wcex.cbWndExtra		= 0;
+	wcex.hInstance		= hInstance;
+	wcex.hIcon			= LoadIcon(hInstance, MAKEINTRESOURCE(IDI_PROJECT));
+	wcex.hCursor		= LoadCursor(NULL, IDC_ARROW);
+	wcex.hbrBackground	= (HBRUSH)(COLOR_WINDOW+1);
+	wcex.lpszMenuName	= MAKEINTRESOURCE(IDC_PROJECT);
+	wcex.lpszClassName	= szWindowClass;
+	wcex.hIconSm		= LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_SMALL));
+
+	return RegisterClassEx(&wcex);
+}
+
+//
+//   FUNCTION: InitInstance(HINSTANCE, int)
+//
+//   PURPOSE: Saves instance handle and creates main window
+//
+//   COMMENTS:
+//
+//        In this function, we save the instance handle in a global variable and
+//        create and display the main program window.
+//
+BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
+{
+   HWND hWnd;
+
+   hInst = hInstance; // Store instance handle in our global variable
+
+   hWnd = CreateWindow(szWindowClass, szTitle, WS_OVERLAPPEDWINDOW,
+      CW_USEDEFAULT, 0, CW_USEDEFAULT, 0, NULL, NULL, hInstance, NULL);
+
+   if (!hWnd)
+   {
+      return FALSE;
+   }
+
+   ShowWindow(hWnd, nCmdShow);
+   UpdateWindow(hWnd);
+
+   return TRUE;
+}
+
+//
+//  FUNCTION: WndProc(HWND, UINT, WPARAM, LPARAM)
+//
+//  PURPOSE:  Processes messages for the main window.
+//
+//  WM_COMMAND	- process the application menu
+//  WM_PAINT	- Paint the main window
+//  WM_DESTROY	- post a quit message and return
+//
+//
+LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	int wmId, wmEvent;
+//	PAINTSTRUCT ps;
+//	HDC hdc;
+
+	switch (message)
+	{
+	case WM_COMMAND:
+		wmId    = LOWORD(wParam);
+		wmEvent = HIWORD(wParam);
+		// Parse the menu selections:
+		switch (wmId)
+		{
+		case IDM_ABOUT:
+			DialogBox(hInst, MAKEINTRESOURCE(IDD_ABOUTBOX), hWnd, About);
+			break;
+		case IDM_EXIT:
+			DestroyWindow(hWnd);
+			break;
+		default:
+			return DefWindowProc(hWnd, message, wParam, lParam);
+		}
+		break;
+	case WM_PAINT:
+		             PaintWindow(hWnd); 
+		break;
+	case WM_DESTROY:
+		PostQuitMessage(0);
+		break;
+	default:
+		return DefWindowProc(hWnd, message, wParam, lParam);
+	}
+	return 0;
+}
+
+// Message handler for about box.
+INT_PTR CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
+{
+	UNREFERENCED_PARAMETER(lParam);
+	switch (message)
+	{
+	case WM_INITDIALOG:
+		return (INT_PTR)TRUE;
+
+	case WM_COMMAND:
+		if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL)
+		{
+			EndDialog(hDlg, LOWORD(wParam));
+			return (INT_PTR)TRUE;
+		}
+		break;
+	}
+	return (INT_PTR)FALSE;
+}
