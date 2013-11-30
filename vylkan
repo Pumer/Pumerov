@@ -1,0 +1,60 @@
+#include "project.cpp"
+class Vulkan{
+
+	Vulkan(double vulcanh,double rgerla,double leftx,double rightx, int pivulcanh,int pirgerla,int pileftx,int pirightx, double alf=0.5){
+this->vulcanh=vulcanh;
+this->rgerla=rgerla;
+this->leftx=leftx;
+this->rightx=rightx;
+this->pivulcanh=pivulcanh;
+this->pirgerla=pirgerla;
+this->pileftx=pileftx;
+this->pirightx=pirightx;
+
+
+  //double vulcanh=2000; /*высота вулкана(м)*/
+  //double rgerla=100; /* радиус жерла(м)*/
+  //double leftx=2000,rightx=2500; /*левая и правая границы основания(м)*/ 
+  //int pivulcanh=j0-kh*vulcanh; /*уровень жерла в пикселях*/
+  //int pirgerla=kh*rgerla; /* радиус жерла в пикселях*/
+  //int pileftx=i0-kh*leftx,pirightx=i0+kh*rightx; /*левая и правая границы основания в пикселях*/
+  //double alf=0.5;
+ //double t=0,dt=0.0009; //время , шаг по времени
+	}
+
+
+void  dvig1()
+{
+  t=0;
+  SelectObject(hdc,hp3[255]); 
+while(t<100)                                           
+{                                                                                    // черный вулкан         
+  alf=t/100;                                                                         //расткеание                                  
+  MoveToEx(hdc, alf*pileftx+(1-alf)*(i0-pirgerla), alf*j0+(1-alf)*pivulcanh, NULL);    //  лавы                                                        
+  LineTo(hdc, alf*pirightx+(1-alf)*(i0+pirgerla),alf*j0+(1-alf)*pivulcanh);                                   
+  t+=dt;  
+} 
+
+}
+
+void dvig2()
+{
+t=0;
+double  alf1;
+while(t<100)                                                
+{                                                                                         
+  alf=t/100; 
+  alf1=1+(alf-1);
+
+  i2=(int)(255*alf1+5*i1);
+  if(i2>255) i2=255; 
+  SelectObject(hdc,hp3[i2]);                                                              //движение                                  
+  MoveToEx(hdc, alf*pileftx+(1-alf)*(i0-pirgerla), alf*j0+(1-alf)*pivulcanh, NULL);       //оранжев лавы                                                   
+  LineTo(hdc, alf*pirightx+(1-alf)*(i0+pirgerla),alf*j0+(1-alf)*pivulcanh);               //  лавы                       
+  t+=dt;     
+  
+}
+
+}
+
+};
