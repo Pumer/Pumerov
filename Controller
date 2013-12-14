@@ -1,0 +1,46 @@
+#include "Model.cpp"
+class Controller 
+{ 
+public: 
+    Controller(VylkanModel *model1,KamenModel *model2,FonModel *model3) 
+    { 
+        _model1 = model1; 
+		 _model2 = model2;
+		  _model3 = model3;
+    } 
+    void start() 
+    { 
+       for(i=0;i<j0;i++)
+		_model3->FonModel();
+t=0;
+	   while(t<100)                                           
+      	_model1->dvig1(int t)
+
+   
+    hkam=0;   
+	yp=j0;
+    while(yp>pivulcanh+3)                      
+    model2->dvig kamen();
+	
+
+t=0;
+double  alf1;
+  while(t<100)                                                
+      
+	_model1->dvig2(int t ,int alf1);
+
+  
+
+  dvig=0;
+  m2:
+  while(yk>0)                                                
+                                                                         
+  model2->vibros kamney(int dvig); 
+  
+
+
+private: 
+  	VylkanModel *_model;
+	KamenModel *_model;
+	FonModel *_model;
+};
