@@ -1,0 +1,64 @@
+#include "Controller.cpp"
+class View: public Observer 
+{ 
+public: 
+    View(VylkanModel *model1,KamenModel *model2,FonModel *model3) 
+    { 
+        _model1 = model1; 
+        _model1->addObserver(this);
+		_model2 = model2; 
+        _model2->addObserver(this);
+		_model3= model3; 
+        _model3->addObserver(this);
+    }
+
+
+void fon view ()
+	{
+  SelectObject(hdc,hp4[i2]);  
+  MoveToEx(hdc, 0,i, NULL);                                                            
+  LineTo(hdc, 1500,i);
+  	}
+
+
+		void vylcan view1 ()
+		{
+  SelectObject(hdc,hp3[255]); 
+  MoveToEx(hdc, alf*pileftx+(1-alf)*(i0-pirgerla), alf*j0+(1-alf)*pivulcanh, NULL);    //  лавы                                                        
+  LineTo(hdc, alf*pirightx+(1-alf)*(i0+pirgerla),alf*j0+(1-alf)*pivulcanh); 
+		}
+
+	void vylcan view2 ()
+		{
+  SelectObject(hdc,hp3[i2]);                                                              //движение                                  
+  MoveToEx(hdc, alf*pileftx+(1-alf)*(i0-pirgerla), alf*j0+(1-alf)*pivulcanh, NULL);       //оранжев лавы                                                   
+  LineTo(hdc, alf*pirightx+(1-alf)*(i0+pirgerla),alf*j0+(1-alf)*pivulcanh);  
+  	}
+
+
+	void kamen view2 ()
+	{
+	  Ellipse(hdc,xk0-3,yk0-3,xk0+3,yk0+3);
+	}
+
+	kamen view1 () {
+		Rectangle(hdc,xp-3,yp-3,xp+3,yp+3);
+	}
+
+
+
+	virtual void update() 
+    { 
+
+	_model3->fon view ();
+	_model3->vylcan view1 ();
+	_model3->kamen view1 ();
+	_model3->vylcan view2 ();
+	_model3->kamen view2 ();
+	}
+
+	private: 
+  	VylkanModel *_model;
+	KamenModel *_model;
+	FonModel *_model;
+};
