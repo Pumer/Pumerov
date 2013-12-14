@@ -1,0 +1,150 @@
+#include "project.cpp"
+#include <vector>
+class VylkanModel: public Observable
+{
+public: 
+    VylkanModel(double vulcanh,double rgerla,double leftx,double rightx, int pivulcanh,int pirgerla,int pileftx,int pirightx, double alf=0.5) 
+	{
+this->vulcanh=vulcanh;
+this->rgerla=rgerla;
+this->leftx=leftx;
+this->rightx=rightx;
+this->pivulcanh=pivulcanh;
+this->pirgerla=pirgerla;
+this->pileftx=pileftx;
+this->pirightx=pirightx;
+	}
+
+	
+	void  dvig1(int t)
+	{
+	alf=t/100;                                                                         //расткеание                                  
+      	void vylcan view1 () ;                           
+  t+=dt;
+     notifyUpdate(); 
+	}
+
+void  dvig2(int t int alf1)
+{
+	alf=t/100; 
+  alf1=1+(alf-1);
+  	void vylcan view2 ();
+  i2=(int)(255*alf1+5*i1);
+  if(i2>255) i2=255; 
+               //  лавы                       
+  t+=dt;
+     notifyUpdate(); 
+}
+
+};
+
+
+class KamenModel: public Observable
+{
+public: 
+    	KamenModel(double hkam,double vkam,double g,double xkam, int v0,double xk,double yk,double vxk,double vyk,int xk0,int yk0,int dvig){
+this->hkam=hkam;
+this->vkam=vkam;
+this->g=g;
+this->xkam=xkam;
+this->v0=v0;
+this->xk=xk;
+this->yk=yk;
+this->vxk=vxk;
+this->vyk=vyk;
+this->xk0=xk0;
+this->yk0=yk0;
+this->dvig=dvig;
+		}
+
+
+void dvig kamen ()
+{
+	yp=j0-hkam*kh-3; 
+	kamen view1 () //камня из жерла
+	      //вулкана
+	hkam+=vkam*dt;
+	   notifyUpdate(); 
+}
+
+
+void  vibros kamney ()
+{
+                 
+                                                                                       
+  xk0=xk*kh,yk0=j0-yk*kh; 
+  kamen view2 () //выброс  
+  xk+=vxk*dt*0.6;
+  yk+=vyk*dt*0.8;
+  vyk-=g*dt;
+
+if ((dvig%10)==0)
+{                                        
+yk=2000;
+ xk=2250;
+ vxk=10-dvig;                          // из жерла
+ vyk=50+dvig;
+ dvig+=5;
+}
+else                                  
+{
+ yk=2000;
+ xk=2250;
+ vxk=50+dvig;
+ vyk=50+dvig;                          //вулкана
+ dvig+=5;
+}
+ if(dvig<90) goto m2; 
+
+    notifyUpdate(); 
+}
+	};
+
+
+class FonModel: public Observable
+{
+
+	FonModel(int i1, int i2, int j0){
+this->i1=i1;
+this->i2=i2;
+this->j0=j0;
+	}
+
+	
+	void fon()
+{
+	int i1=0,i2;
+                                                                                         
+  i2=(255.*i)/j0;
+  fon view ();
+    notifyUpdate(); 
+	}
+
+};
+
+
+class Observer 
+{ 
+public: 
+    virtual void update() = 0; 
+}; 
+
+class Observable 
+{ 
+public: 
+    void addObserver(Observer *observer) 
+    { 
+        _observers.push_back(observer); 
+    } 
+    void notifyUpdate() 
+    { 
+        int size = _observers.size(); 
+        for (int i = 0; i < size; i++) 
+        { 
+            _observers[i]->update(); 
+        } 
+    } 
+private: 
+    std::vector<Observer*> _observers; 
+};
+
